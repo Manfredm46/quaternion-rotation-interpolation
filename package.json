@@ -1,6 +1,6 @@
 {
   "name": "quaternion-rotation-interpolation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ESM library for slerp between unit quaternions and 3D rotation sequence composition",
   "type": "module",
   "main": "src/index.js",
