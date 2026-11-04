@@ -22,3 +22,10 @@ Quaternions are `[x, y, z, w]`. Multiplication uses the Hamilton product. `compo
 `slerp` normalizes its inputs once at the start and always returns a unit quaternion. The interpolation takes the shorter arc: when two rotations are nearly opposite (their 4-vectors point away from each other), one operand is negated so the path stays under 180°. For antipodal inputs, where the shortest arc is undefined, the implementation chooses a fixed direction by negating the second operand rather than throwing — callers that need a specific direction should detect this case and pass an explicit end.
 
 The library exists because correct slerp has two quietly awkward edges — the near-parallel case (where dividing by `sin(theta)` loses significant digits) and the antiparallel case (where the shortest arc is undefined) — and handling both inline keeps a rotation pipeline self-contained without pulling a math framework. The trade-off is that `compose` left-folds and returns a unit quaternion: it does not preserve arbitrary scale or support non-rotation (dual) quaternions.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
